@@ -22,8 +22,12 @@ class getinfo
 {
 
 	public:
-		void GetNodeInfo(struct NodeInfo *Node);
+		void GetOsInfo(struct NodeInfo *Node);
 		void GetProcessInfo(pid_t pid, struct ProcessInfo * Process);
+		void GetCpuInfo(struct NodeInfo *Node);
+		void GetMemoryInfo(struct NodeInfo *Node);
+
+		
 
 };
 
