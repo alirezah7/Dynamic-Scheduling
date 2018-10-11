@@ -1,0 +1,18 @@
+//ExecuterUnit.h
+//protoc  --cpp_out=./ ExecuterUnit.proto
+
+syntax = "proto2";
+package info;
+
+
+message ExecuterUnit
+{
+	optional int32 MemoryTotal = 1;
+	optional int32 MemoryRemained = 2;
+	optional int32 CpuTotal = 3;
+	optional int32 CpuRemaind = 4;
+	optional int32 pid = 5;
+	optional string CodePath = 6;
+	optional string IpAddress = 7;
+};
+
