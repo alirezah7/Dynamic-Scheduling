@@ -22,25 +22,24 @@ void Client::Start()
 	cin >> ip;
 	Reciever reciever(ip);
 
+	int i = 0;
+	std::thread* run[10];
+	std::thread* migrate[10];
+
 	while(true)
 	{
 		reciever.Recieve(command);
 		if(command.Type == "run")
 		{	
-			std::thread* run = new std::thread(&ExecuterUnit::Execute, executerUnit, command.PID, command.StartIndex, command.EndIndex);
-			t.push(run);
+			run[i] = new std::thread(&ExecuterUnit::Execute, executerUnit, command.PID, command.StartIndex, command.EndIndex);
+			t.push(run[i]);
 		}
 
 		else if(command.Type == "migrate")
 		{
-			cout << "migrate" << endl;
-			newCommand.Type = "run";
-			newCommand.PID = 0;
-			newCommand.StartIndex = command.StartIndex;
-			newCommand.EndIndex = command.EndIndex;
-			t.pop();
-			newCommand.DestIP = "127.1.1.2";
-			sender.Send("127.1.1.2", newCommand);
+			migrate[i] = new std::thread(&ExecuterUnit::MigrateProcess, executerUnit, command.PID, command.DestIP);
+			t.push(migrate[i]);
 		}
+		i++;
 	}
 }

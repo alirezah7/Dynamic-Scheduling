@@ -23,7 +23,7 @@ class Client
 
 		Sender sender;
 		Command command;
-		Command newCommand;
+		//Command newCommand;
 		ExecuterUnit executerUnit;
 
 	public:
