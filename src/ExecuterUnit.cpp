@@ -9,8 +9,10 @@
 using namespace std;
 
 std::mutex m;
-int i, j = 0;
-bool flag = false;
+int i[10] = {0};
+int j[10] = {0};
+int curr[10] = {0};
+bool flag[10] = {false};
 
 
 vector<function<void()>> ExecuterUnit::get(int Index)
@@ -26,45 +28,41 @@ void ExecuterUnit::set(int Index, vector<function<void()>> q)
 void ExecuterUnit::Execute(int PId, int StartIndex, int EndIndex)
 {
 	vector<function<void()>> CurrentProcess = get(PId);
-	int curr = 0;
-	i = StartIndex;
-	j = EndIndex;
+	i[PId] = StartIndex;
+	j[PId] = EndIndex;
 
-	while(i <= j)
+	while(i[PId] <= j[PId])
 	{
-		m.lock();
-		curr = i;
-		++i;
-		m.unlock();
+		curr[PId] = i[PId];
+		++i[PId];
 
-		auto CurrentFunction = CurrentProcess[curr];
+		auto CurrentFunction = CurrentProcess[curr[PId]];
 		CurrentFunction();
 
-		m.lock();
-		if(flag) break;
-		flag = false;
-		m.unlock();
+		if(flag[PId]) break;
+		flag[PId] = false;
 	}
 
 }
 
 void ExecuterUnit::MigrateProcess(int PId, string ip)
 	{
-		m.lock();
-		flag = true;
-		m.unlock();
+
+		flag[PId] = true;
+
 
 		Command newCommand;
 		newCommand.Type = "run";
 		newCommand.PID = PId;
 		newCommand.DestIP = ip;
 
-		m.lock();
-		newCommand.StartIndex = i;
-		newCommand.EndIndex = j;
-		i = 0;
-		j = 0;
-		m.unlock();
+
+		newCommand.StartIndex = i[PId];
+		newCommand.EndIndex = j[PId];
+		i[PId] = 0;
+		j[PId] = 0;
+		curr[PId] = 0;
+
 
 		sender.Send(newCommand.DestIP, newCommand);
 	}
