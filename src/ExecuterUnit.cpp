@@ -49,19 +49,16 @@ void ExecuterUnit::MigrateProcess(int PId, string ip)
 
 		flag[PId] = true;
 
-
 		Command newCommand;
 		newCommand.Type = "run";
 		newCommand.PID = PId;
 		newCommand.DestIP = ip;
-
-
 		newCommand.StartIndex = i[PId];
 		newCommand.EndIndex = j[PId];
+	
 		i[PId] = 0;
 		j[PId] = 0;
 		curr[PId] = 0;
-
 
 		sender.Send(newCommand.DestIP, newCommand);
 	}
