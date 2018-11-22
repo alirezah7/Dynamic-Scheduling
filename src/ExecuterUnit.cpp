@@ -40,9 +40,8 @@ void ExecuterUnit::Execute(int PId, int StartIndex, int EndIndex)
 		CurrentFunction();
 
 		if(flag[PId]) break;
-		flag[PId] = false;
 	}
-
+	flag[PId] = false;
 }
 
 void ExecuterUnit::MigrateProcess(int PId, string ip)
